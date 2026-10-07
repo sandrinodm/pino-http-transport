@@ -40,6 +40,13 @@ jobs:
         run: npm pack --dry-run --json
       - name: Audit dependencies
         run: pnpm audit --audit-level=moderate
+      - name: Set up minimum runtime
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24.0.0'
+          package-manager-cache: false
+      - name: Verify transport on minimum runtime
+        run: node --test test/runtime.test.cjs
       - name: Verify lifecycle operations left the repository clean
         shell: bash
         run: |

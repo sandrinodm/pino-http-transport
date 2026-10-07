@@ -2,7 +2,29 @@
   "name": "pino-http-transport",
   "version": "2.0.0",
   "description": "A reliable Pino transport for sending logs to an HTTP endpoint",
+  "keywords": [
+    "http",
+    "logging",
+    "pino",
+    "transport"
+  ],
+  "homepage": "https://github.com/sandrinodm/pino-http-transport#readme",
+  "bugs": {
+    "url": "https://github.com/sandrinodm/pino-http-transport/issues"
+  },
+  "license": "MIT",
+  "author": "Sandrino Di Mattia",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sandrinodm/pino-http-transport.git"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -12,59 +34,38 @@
       "default": "./dist/index.js"
     }
   },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
-  "sideEffects": false,
-  "scripts": {
-    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
-    "build": "pnpm run clean && tsc -p tsconfig.build.json",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "check": "biome check . && jsdoc-lint src && pnpm run typecheck",
-    "check:fix": "biome check --write --unsafe . && jsdoc-lint src && pnpm run typecheck",
-    "prepack": "pnpm run build",
-    "prepublishOnly": "pnpm run check && pnpm run test:coverage"
-  },
-  "keywords": [
-    "pino",
-    "transport",
-    "logging",
-    "http"
-  ],
-  "author": "Sandrino Di Mattia",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sandrinodm/pino-http-transport.git"
-  },
-  "bugs": {
-    "url": "https://github.com/sandrinodm/pino-http-transport/issues"
-  },
-  "homepage": "https://github.com/sandrinodm/pino-http-transport#readme",
-  "engines": {
-    "node": ">=24.0.0"
-  },
-  "packageManager": "pnpm@11.17.0",
   "publishConfig": {
     "access": "public",
     "provenance": true
+  },
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "build": "pnpm run clean && tsc -p tsconfig.build.json",
+    "test": "pnpm run build && vp test run",
+    "test:watch": "pnpm run build && vp test watch",
+    "test:coverage": "pnpm run build && vp test run --coverage",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "check": "vp check && jsdoc-lint src",
+    "check:fix": "vp check --fix && jsdoc-lint src",
+    "format": "vp fmt",
+    "lint": "vp lint",
+    "prepack": "pnpm run build",
+    "prepublishOnly": "pnpm run check && pnpm run test:coverage"
   },
   "dependencies": {
     "pino-abstract-transport": "^3.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.5",
-    "@types/node": "^24.13.3",
-    "@vitest/coverage-v8": "^4.1.10",
-    "jsdoc-lint": "^0.4.0",
+    "@types/node": "^24.19.0",
+    "@vitest/coverage-v8": "5.0.1",
+    "jsdoc-lint": "^0.6.0",
     "pino": "^10.3.1",
-    "release-it": "^20.2.1",
+    "release-it": "^21.1.0",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.10"
-  }
+    "vite-plus": "1.0.0"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "packageManager": "pnpm@12.8.2"
 }

@@ -1,15 +1,21 @@
 packages:
-  - "."
-  - "examples/*"
+  - '.'
+  - 'examples/*'
 
 minimumReleaseAge: 10080
 
-allowBuilds:
-  esbuild: true
+peerDependencyRules:
+  allowedVersions:
+    # The official Vite+ core alias reports its toolchain version, not Vite's major.
+    vite: '1.0.0'
+
 overrides:
-  esbuild: 0.28.1
-  picomatch: 4.0.5
-  postcss: 8.5.23
-  rollup: 4.62.3
-  vite: 7.3.5
-  yaml: 2.9.0
+  picomatch: 4.0.7
+  postcss: 8.5.28
+  # Keep Vite and Vitest aligned with the versions bundled by Vite+.
+  'vite@*': npm:@voidzero-dev/vite-plus-core@1.0.0
+  'vitest@*': 5.0.1
+  yaml: 2.9.1
+  # Remove once these release-tool dependencies adopt patched versions upstream.
+  'release-it@21.1.0>undici': 7.29.1
+  'get-uri@8.0.1>basic-ftp': 6.2.1

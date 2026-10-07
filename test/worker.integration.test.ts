@@ -3,7 +3,7 @@ import { once } from 'node:events';
 import { resolve } from 'node:path';
 
 import pino from 'pino';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vite-plus/test';
 
 type ReceiverMessage =
   | { type: 'ready'; port: number }
@@ -52,4 +52,25 @@ describe('worker transport lifecycle', () => {
       await once(receiver, 'exit');
     }
   }, 10_000);
+
+  it('awaits delivery flush before ending a worker whose backlog takes over ten seconds', async () => {
+    // Run the logging lifecycle in a normal Node process, outside Vitest's module hooks.
+    const driver = fork(resolve(process.cwd(), 'test/fixtures/worker-flush.cjs'), {
+      execArgv: [],
+      stdio: ['ignore', 'ignore', 'inherit', 'ipc'],
+    });
+    const result = await new Promise<{ elapsed: number; indexes: number[] }>((resolve, reject) => {
+      let report: { elapsed: number; indexes: number[] } | undefined;
+      driver.once('message', (message) => {
+        report = message as typeof report;
+      });
+      driver.once('error', reject);
+      driver.once('exit', (code) => {
+        if (code !== 0 || !report) reject(new Error(`Worker flush driver exited without a successful report: ${code}`));
+        else resolve(report);
+      });
+    });
+    expect(result.elapsed).toBeGreaterThan(10_000);
+    expect(result.indexes).toEqual(Array.from({ length: 2000 }, (_, index) => index));
+  }, 20_000);
 });

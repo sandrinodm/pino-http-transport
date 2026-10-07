@@ -1,6 +1,6 @@
 # Contributing
 
-Use Node.js 24 and pnpm 11. Before opening a pull request, run:
+Use a current Node.js 24 release (24.15 or later for release tooling) and pnpm 12. Before opening a pull request, run:
 
 ```bash
 corepack enable
@@ -8,11 +8,15 @@ pnpm install --frozen-lockfile
 pnpm check
 pnpm build
 pnpm test:coverage
+node --test test/runtime.test.cjs
 npm pack --dry-run --json
 ```
 
-Keep changes focused and add regression tests for behavior changes. Biome owns
-formatting and linting; TypeScript is checked with strict compiler options.
+Keep changes focused and add regression tests for behavior changes. Vite+ runs
+Oxfmt, Oxlint, and strict TypeScript checks through `pnpm check`. Configure them
+alongside tests in `vite.config.ts`; run `pnpm check:fix` to apply safe fixes.
+The Vite+ development tools require Node 24.11 or later, while releases require
+24.15 or later. The published transport supports Node 24.0.0 or later.
 Keep transport tests in `test/`, including worker and package-loading coverage
 where relevant.
 

@@ -1,13 +1,16 @@
 const { createServer } = require('node:http');
 
 const batches = [];
+const responseDelay = Number(process.env.RESPONSE_DELAY ?? 0);
 const server = createServer((request, response) => {
   const chunks = [];
   request.on('data', (chunk) => chunks.push(chunk));
   request.on('end', () => {
     batches.push(JSON.parse(Buffer.concat(chunks).toString('utf8')));
-    response.writeHead(204);
-    response.end();
+    setTimeout(() => {
+      response.writeHead(204);
+      response.end();
+    }, responseDelay);
   });
 });
 
@@ -23,6 +26,12 @@ process.on('message', (message) => {
   }
 
   if (message?.type === 'close') {
+    server.closeAllConnections();
     server.close(() => process.exit(0));
   }
+});
+
+process.on('disconnect', () => {
+  server.closeAllConnections();
+  server.close(() => process.exit(0));
 });
