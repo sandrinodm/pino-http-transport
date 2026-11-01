@@ -56,13 +56,13 @@
     "pino-abstract-transport": "^3.0.0"
   },
   "devDependencies": {
-    "@types/node": "^24.19.0",
-    "@vitest/coverage-v8": "5.0.1",
+    "@types/node": "^26.6.5",
+    "@vitest/coverage-v8": "5.0.5",
     "jsdoc-lint": "^0.6.0",
     "pino": "^10.3.1",
     "release-it": "^21.1.0",
     "typescript": "^7.0.2",
-    "vite-plus": "1.0.0"
+    "vite-plus": "1.4.0"
   },
   "engines": {
     "node": ">=24.0.0"
